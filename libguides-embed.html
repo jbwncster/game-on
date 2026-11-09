@@ -8,7 +8,7 @@ var box=document.createElement("section");box.id="game-on-embed";
 box.innerHTML='<p><strong>🎲 Game On! — Eastern Wake Library</strong></p><p>Browse 28 games, puzzles &amp; LEGO items. 3-hour reserve; ask the front desk.</p><p><a href="https://game-on-flame.vercel.app/" target="_blank" rel="noopener noreferrer">Open the live availability tracker</a></p>';
 parent.appendChild(box);
 var script=document.createElement("script");
-script.src="https://game-on-flame.vercel.app/static/embed.js";
+script.src="https://game-on-flame.vercel.app/static/embed.js?v=20261109-2";
 script.async=true;
 script.onerror=function(){var p=document.createElement("p");p.textContent="Live availability cannot load inside this guide. Open the tracker using the link above.";box.appendChild(p);};
 document.head.appendChild(script);
