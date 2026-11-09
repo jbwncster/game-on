@@ -1,46 +1,41 @@
-# Game On! — Eastern Wake Reserve Tracker
+# Game On! — Eastern Wake Campus Library
 
-## Definitive inventory and artwork
+Manual availability tracker for 28 games, puzzles and LEGO items. **All checkouts are 3-hour loans.** This does **not** integrate with SirsiDynix; the official checkout and return must happen in SirsiDynix first.
 
-**Source of truth:** the seven-page PDF `Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf` supplied by Eastern Wake staff. Its 28 cards and the names, descriptions, piece counts, player counts, loan labels, warnings, and SirsiDynix barcode values printed on them supersede any conflicting website or marketplace listing. The aligned `items.json` includes `source_page` (four cards per page) for easy auditing. Amazon, eBay, BoardGameGeek, and the public LibGuide are secondary sources for artwork only, and should not change the catalog data. The supplied PDF itself is not committed to this repository.
+## Student features
+- Search titles, barcodes, categories, and call numbers
+- Availability sections: ready to borrow, checked out, out of service
+- Cover art and known missing-piece warnings
+- Clear last staff change and connection status, refresh button and mobile responsive layout
+- Keyboard navigation, skip link and status announcements
+- SVG QR code at `/qr` pointing at the public catalog
 
+## Staff features
+- Password-protected login and 12-hour staff sessions
+- USB/keyboard barcode scanner lookup (barcode + Enter); scanning **does not check out an item**
+- Staff-confirmed SirsiDynix transaction before each 3-hour checkout/return
+- Out-of-service status and private 250-character condition notes, persisted as maintenance events
+- Staff usage totals, overdue lists, CSV export, and password-protected reset of reporting totals
+- Maintenance changes do not clear historical circulation, and item notes never appear in public feeds
 
+## Deployment requirements
+Python 3.10+ / Flask. Install `pip install -r requirements.txt`.
+Set `APP_SECRET` to a cryptographically random value at least 32 characters long and `STAFF_PASSWORD_HASH` to a PBKDF2 hash. See `.env.example` for settings. **Never commit credentials or patron information.**
 
-A staff-managed availability board for the Eastern Wake Campus Library's **28 games, puzzles, and LEGO items**. This repository contains the Flask application. It is not yet a live website.
+For Vercel hosting, configure a **private** Vercel Blob store with `BLOB_READ_WRITE_TOKEN`. On local hosting, `DATABASE_PATH` is a SQLite database that must live on persistent storage. If a Vercel deployment lacks Blob credentials, startup intentionally fails rather than reporting inaccurate availability.
 
-## Features
-- Public **Ready to Borrow** and **Checked Out** views
-- Staff-only checkout and check-in controls
-- Automatic timestamps and three-hour due windows, displayed in Eastern Time
-- Overdue countdown and recent activity log
-- Manual updates; **not connected to SirsiDynix**
-- One card per unique item; no patron information collected
+Set `PUBLIC_SITE_URL` to the confirmed canonical public HTTPS URL (e.g. `https://YOUR-SITE.example`), used for the QR code and LibGuides snippet. The fallback is the request URL, so explicitly configuring the URL is recommended.
 
-## Run locally
-1. Install Python 3.10+ and `pip install -r requirements.txt`.
-2. Copy `.env.example` to `.env`.
-3. Generate a random 32+ character `APP_SECRET` and a password hash. Do not commit either value.
-4. Run `python app.py` and open http://localhost:5000.
+## LibGuides
+Open `/libguides-snippet` for HTML that links to the student catalog in a new tab. Paste this into a LibGuides HTML editor. The link approach is robust when third-party iframe embedding is blocked.
 
-Generate a staff password hash with:
-```bash
-python -c "import hashlib,secrets,getpass; p=getpass.getpass('Staff password: '); s=secrets.token_bytes(16); n=390000; print('pbkdf2_sha256$'+str(n)+'$'+s.hex()+'$'+hashlib.pbkdf2_hmac('sha256',p.encode(),s,n).hex())"
-```
+Download the SVG at `/qr` for a shelf flyer or LibGuides image. **Verify the QR code opens the deployed public catalog before printing it.**
 
-## Hosting / LibGuides
-Host on a secure HTTPS server with a **persistent** disk. Set `DATABASE_PATH` to the persistent disk path; otherwise all statuses may disappear during redeployments. Configure `APP_SECRET` and `STAFF_PASSWORD_HASH` as private host environment variables. Do **not** use static GitHub Pages for this Flask app.
+## Cover images
+The 28 `items.json` entries refer to `static/covers/cover_01.webp` through `cover_28.webp`. Align covers with the seven-page Adobe Express PDF. *Amazing Coral Reef* has no verified exact box cover in that document; keep its placeholder until identified. The earlier extracted ZIP is not automatically synced to GitHub.
 
-When deployed, embed the secure URL in a LibGuides HTML box:
-```html
-<iframe src="https://YOUR-DEPLOYED-SITE" title="Game On! Eastern Wake Reserve Tracker" width="100%" height="950" style="border:0" loading="lazy"></iframe>
-```
+## Testing
+Run `python -m unittest discover -s tests -v`. Also manually test: staff login, real barcode scanner input, each maintenance state, 3-hour due times, CSV download/reset, connection interruption, mobile layouts, screen readers, and persistence across a fresh deployment. Confirm with Wake Tech IT before publishing or hosting product imagery.
 
-**Security:** Use a stronger, unique staff password before production deployment, and ask Wake Tech IT to review hosting, authentication, access controls, backups, and permission to use game cover artwork. Avoid patron names or borrowing histories in this tracker.
-
-## Cover image assets (still to upload)
-
-The PDF includes card art for 27 items and one placeholder for Amazing Coral Reef. The earlier source package includes 28 optimized cover-image assets (which may not all match the PDF). The source package includes optimized cover images under `static/covers/cover_01.webp` through `cover_28.webp`. Those **binary images have not yet been uploaded to this repository**. Until then, the web page displays a dice placeholder instead of the cover. Extract the [GitHub-ready ZIP](https://chatgpt.com/) supplied in the project conversation, then use GitHub's **Add file → Upload files** to upload `static/covers/` (preserving the paths). Do not upload `.env`.
-
-## Testing status
-
-Python and JavaScript source syntax has been checked locally. End-to-end Flask tests and physical barcode scanner tests have **not** been completed. The repo is not yet deployed and is not ready to embed in LibGuides until hosting, persistent storage, and staff sign-in are verified.
+## Privacy
+Do not enter names, ID numbers, patron details, or borrowing histories in condition notes. Only staff should receive notes. The student board shows item status, not patron data.
