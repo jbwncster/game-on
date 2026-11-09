@@ -1,0 +1,24 @@
+<!-- Paste in the guide-specific custom JavaScript/CSS field (under 2,000 chars).
+Remove any previous Game On embed code first. -->
+<style>
+#game-on-embed{max-width:1200px;margin:20px auto;font-family:Arial,sans-serif}
+#game-on-embed .intro{background:#183659;color:#fff;padding:16px 20px;border-radius:12px 12px 0 0}
+#game-on-embed h2{margin:0 0 6px;color:#fff;font-size:25px}
+#game-on-embed p{margin:5px 0}
+#game-on-embed iframe{display:block;width:100%;min-height:1100px;border:1px solid #cfd9e8;border-radius:0 0 12px 12px;background:#fff}
+#game-on-embed a{color:#fff;text-decoration:underline}
+@media(max-width:700px){#game-on-embed iframe{min-height:1400px}}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+const root=document.querySelector("#s-lg-guide-main");
+if(!root||document.querySelector("#game-on-embed"))return;
+const url="https://game-on-jbwncster1-1676.vercel.app/";
+const box=document.createElement("section");
+box.id="game-on-embed";
+box.innerHTML='<div class="intro"><h2>🎲 Game On!</h2><p>Eastern Wake Library — 28 Games, Puzzles &amp; LEGO Items</p><p>3-hour reserve · Ask front desk</p><p>See staff-reported availability below or <a href="'+url+'" target="_blank" rel="noopener noreferrer">open the tracker in a new tab</a>.</p></div>';
+const frame=document.createElement("iframe");
+frame.src=url;frame.title="Game On! Eastern Wake game and puzzle availability";
+frame.loading="lazy";box.appendChild(frame);root.appendChild(box);
+});
+</script>
