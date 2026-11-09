@@ -9,6 +9,7 @@ function render(data){
   report=data;
   $("stats-dashboard").hidden=false;$("stats-login").hidden=true;
   $("stats-updated").textContent="Updated "+fmt(data.generated_at);
+  $("stats-reset-note").textContent=data.stats_reset_at?"Reporting totals reset on "+fmt(data.stats_reset_at)+". Current availability is unchanged.":"Reporting totals include all recorded activity.";
   const kpis=[["All-time checkouts",data.total_checkouts],["Checkouts, 7 days",data.checkouts_7d],["Checkouts, 30 days",data.checkouts_30d],["Returns, 30 days",data.returns_30d],["Currently checked out",data.currently_out],["Currently overdue",data.currently_overdue]];
   $("stats-kpis").replaceChildren(...kpis.map(([label,value])=>{const item=document.createElement("div");item.className="stats-kpi";const n=document.createElement("strong");n.textContent=value;const p=document.createElement("span");p.textContent=label;item.append(n,p);return item;}));
   const out=$("stats-out");out.replaceChildren();
@@ -45,4 +46,42 @@ $("stats-export").addEventListener("click",()=>{
   const objectUrl=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
   const a=document.createElement("a");a.href=objectUrl;a.download="game-on-checkout-stats.csv";a.click();URL.revokeObjectURL(objectUrl);
 });
+
+const clearDialog=$("stats-clear-dialog");
+$("stats-clear-open").addEventListener("click",()=>{
+  $("stats-clear-password").value="";
+  $("stats-clear-phrase").value="";
+  $("stats-clear-error").textContent="";
+  clearDialog.showModal();
+});
+$("stats-clear-cancel").addEventListener("click",()=>clearDialog.close());
+$("stats-clear-form").addEventListener("submit",async event=>{
+  event.preventDefault();
+  if($("stats-clear-phrase").value!=="CLEAR STATS"){
+    $("stats-clear-error").textContent="Type CLEAR STATS exactly to continue.";
+    return;
+  }
+  const submit=$("stats-clear-submit");
+  submit.disabled=true;
+  $("stats-clear-error").textContent="";
+  try{
+    const response=await fetch("/api/staff/stats/reset",{
+      method:"POST",
+      headers:{"Authorization":"Bearer "+token,"Content-Type":"application/json"},
+      body:JSON.stringify({
+        password:$("stats-clear-password").value,
+        confirmation:$("stats-clear-phrase").value
+      })
+    });
+    const result=await response.json();
+    if(!response.ok)throw Error(result.error||"Unable to reset statistics");
+    clearDialog.close();
+    $("stats-clear-password").value="";
+    $("stats-clear-phrase").value="";
+    await load();
+  }catch(error){
+    $("stats-clear-error").textContent=error.message;
+  }finally{submit.disabled=false;}
+});
+
 if(token)load().catch(e=>{$("stats-error").textContent=e.message;});
