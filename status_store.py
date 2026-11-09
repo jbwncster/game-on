@@ -34,11 +34,11 @@ def list_events():
         with _local_connection() as db:
             rows=db.execute("SELECT item_id,action,at FROM actions ORDER BY id").fetchall()
         return [dict(item_id=x[0],action=x[1],at=x[2]) for x in rows]
-    from vercel.blob import list_objects
+    from vercel.blob import BlobClient
     records=[]
     cursor=None
     while True:
-        page=list_objects(prefix="events/", limit=1000, cursor=cursor)
+        page=BlobClient().list_objects(prefix="events/", limit=1000, cursor=cursor)
         for blob in page.blobs:
             event=parse_path(blob.pathname)
             if event:
@@ -55,9 +55,9 @@ def write_event(item_id,action,when):
         with _local_connection() as db:
             db.execute("INSERT INTO actions(item_id,action,at) VALUES(?,?,?)",(item_id,action,when.isoformat()))
         return
-    from vercel.blob import put
+    from vercel.blob import BlobClient
     action_short="out" if action=="checked_out" else "in"
     stamp=when.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     safe_id=item_id.replace("-","_")
     pathname=f"events/{stamp}-{uuid.uuid4().hex}-{safe_id}-{action_short}.json"
-    put(pathname,b"{}",access="private",content_type="application/json")
+    BlobClient().put(pathname,b"{}",access="private",content_type="application/json")
