@@ -77,6 +77,32 @@ class GameOnIntegrationTests(unittest.TestCase):
         self.assertEqual(stats.json["total_checkouts"],1)
         self.assertEqual(stats.json["currently_out"],1)
 
+
+    def test_staff_inventory_statuses_and_counts(self):
+        h=self.auth()
+        self.client.post("/api/item/item-01/toggle",headers=h)
+        self.client.post("/api/staff/item/item-02/maintenance",headers=h,
+            json={"out_of_service":True,"note":"Staff review needed"})
+        result=self.client.get("/api/staff/stats",headers=h)
+        self.assertEqual(result.status_code,200)
+        data=result.json
+        self.assertEqual(len(data["item_statuses"]),28)
+        counts=data["status_counts"]
+        self.assertEqual(sum(counts.values()),28)
+        self.assertEqual(counts["Available"],26)
+        self.assertEqual(counts["Checked out"],1)
+        self.assertEqual(counts["Overdue"],0)
+        self.assertEqual(counts["Out of service"],1)
+        self.assertEqual(data["item_statuses"][0]["status"],"Checked out")
+        self.assertEqual(data["item_statuses"][1]["status"],"Out of service")
+        self.assertEqual(data["item_statuses"][1]["condition_note"],"Staff review needed")
+        self.assertEqual(data["by_item"][1]["status"],"Out of service")
+        self.client.post("/api/staff/stats/reset",headers=h,
+            json={"confirmation":"CLEAR STATS","password":self.password})
+        after=self.client.get("/api/staff/stats",headers=h).json
+        self.assertEqual(after["status_counts"],counts)
+        self.assertEqual(after["total_checkouts"],0)
+
     def test_invalid_condition_note(self):
         h=self.auth()
         response=self.client.post("/api/staff/item/item-02/maintenance",headers=h,
