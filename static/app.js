@@ -110,4 +110,9 @@ $("login-form").addEventListener("submit",async e=>{
   }catch(error){$("login-error").textContent=error.message;}
 });
 document.addEventListener("error",e=>{if(e.target.tagName==="IMG"){e.target.hidden=true;e.target.parentElement.classList.add("no-image");}},true);
+if(new URLSearchParams(window.location.search).get("staff")==="1" && !staffToken){
+  $("login-error").textContent="";
+  $("password").value="";
+  $("login-dialog").showModal();
+}
 refresh();setInterval(refresh,60000);setInterval(()=>{if(board.length)render();},30000);
