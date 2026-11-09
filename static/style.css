@@ -25,3 +25,11 @@
 #stats-clear-form label{font-weight:650}
 #stats-clear-form input{font:inherit;padding:.7rem;border:1px solid #9baab9;border-radius:8px;width:100%}
 #stats-clear-error{color:#ae2323;font-weight:650;min-height:1em}
+
+.stats-clear-panel{max-width:620px;margin:1rem 0 2rem;padding:1.4rem;border:2px solid #a83535;border-radius:12px;background:#fff9f8;box-shadow:0 3px 15px #4a202012}
+.stats-clear-panel[hidden]{display:none!important}
+.stats-clear-panel h2{margin:0 0 .5rem}
+.stats-clear-panel form{display:grid;gap:.85rem}
+.stats-clear-panel input{width:100%;font:inherit;padding:.8rem;border:1px solid #9baab9;border-radius:8px}
+.stats-clear-panel label{font-weight:650}
+.stats-clear-panel .buttons{justify-content:flex-start;flex-wrap:wrap}
