@@ -33,3 +33,26 @@
 .stats-clear-panel input{width:100%;font:inherit;padding:.8rem;border:1px solid #9baab9;border-radius:8px}
 .stats-clear-panel label{font-weight:650}
 .stats-clear-panel .buttons{justify-content:flex-start;flex-wrap:wrap}
+
+
+/* Game On! mobile, maintenance, accessibility and connection enhancements */
+.skip-link{position:absolute;left:1rem;top:-5rem;background:white;color:#183659;padding:.75rem 1rem;z-index:30;border:2px solid #183659}.skip-link:focus{top:.5rem}
+button,input,textarea{font:inherit}button,a,input,textarea{touch-action:manipulation}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #e29b00;outline-offset:3px}
+[hidden]{display:none!important}
+.connection-status{margin:1rem 0;padding:.8rem 1rem;background:#e4f3eb;border-left:4px solid #216a42;border-radius:8px;color:#194b34}
+.connection-status.connection-error{background:#fff0ee;border-left-color:#9d3131;color:#822323}
+.staff-tools{background:white;border:1px solid #cedbe8;border-radius:12px;padding:1rem;margin:1.2rem 0;max-width:700px}
+.staff-tools label,#maintenance-form label{font-weight:650}
+.scan-row{display:flex;gap:.6rem;flex-wrap:wrap;margin:.65rem 0}
+.scan-row input{flex:1;min-width:190px;padding:.8rem;border:1px solid #96a7ba;border-radius:8px}
+.staff-card-actions{display:grid;gap:.5rem;margin-top:auto}
+.staff-card-actions button{width:100%;min-height:44px}
+.maintenance-open{background:#e8eef7;color:#183659;border:1px solid #aebed0}
+.private-note{background:#edf2f8;border-radius:8px;padding:.65rem;font-size:.85rem}
+#maintenance-form{display:grid;gap:.75rem}
+#maintenance-form textarea{padding:.7rem;border:1px solid #98a7b7;border-radius:9px;resize:vertical}
+#maintenance-dialog{width:min(95vw,520px)}
+footer a{color:#224e80}
+@media(max-width:650px){header{padding:1.2rem 0}.cards{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}.toolbar{display:grid;grid-template-columns:1fr}.toolbar input{min-width:0;width:100%}.filters .filter{flex:1;min-width:125px}.auth{width:100%}.auth button,.auth a{flex:1;text-align:center}.buttons{flex-wrap:wrap}.buttons button{flex:1;min-height:44px}.stats-table-wrap{max-width:calc(100vw - 2rem)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
