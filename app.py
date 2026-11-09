@@ -235,6 +235,31 @@ def reset_staff_stats():
                    message="Reporting totals reset; item availability unchanged.")
 
 
+@app.get("/qr")
+def qr_code():
+    """Downloadable SVG linking to the current public student catalog."""
+    import io
+    import qrcode
+    import qrcode.image.svg
+    target = os.getenv("PUBLIC_SITE_URL", request.url_root).rstrip("/") + "/"
+    qr = qrcode.make(target, image_factory=qrcode.image.svg.SvgPathImage, box_size=12, border=4)
+    buffer=io.BytesIO()
+    qr.save(buffer)
+    return Response(buffer.getvalue(), content_type="image/svg+xml",
+                    headers={"Content-Disposition":"inline; filename=game-on-qr.svg"})
+
+@app.get("/libguides-snippet")
+def libguides_snippet():
+    """A simple link works even when LibGuides disallows third-party iframes."""
+    from markupsafe import escape
+    url=os.getenv("PUBLIC_SITE_URL",request.url_root).rstrip("/") + "/"
+    html = ('<a href="'+str(escape(url))+'" target="_blank" rel="noopener noreferrer" '
+            'aria-label="Browse Game On! reserves (opens in new window)">'
+            'Browse Game On! — Eastern Wake games, puzzles and LEGO '
+            '(opens in new window)</a>')
+    return Response(html, content_type="text/plain; charset=utf-8",
+                    headers={"Content-Disposition":"inline; filename=libguides-snippet.txt"})
+
 @app.get("/health")
 def health():
     return jsonify(ok=True,storage=("blob" if os.getenv("BLOB_READ_WRITE_TOKEN") else "local"))
