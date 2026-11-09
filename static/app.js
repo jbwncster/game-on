@@ -74,4 +74,5 @@ $("login-form").addEventListener("submit",async e=>{
     staffToken=data.token;sessionStorage.setItem("game-on-token",staffToken);$("login-dialog").close();render();
   }catch(error){$("login-error").textContent=error.message;}
 });
+document.addEventListener("error",e=>{if(e.target.tagName==="IMG"){e.target.hidden=true;e.target.parentElement.classList.add("no-image");}},true);
 refresh();setInterval(refresh,60000);setInterval(()=>{if(board.length)render();},30000);
