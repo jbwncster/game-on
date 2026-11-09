@@ -15,3 +15,13 @@
 .stats-table-wrap tr:last-child td{border:0}
 .sirsi-check{display:flex;gap:.65rem;align-items:flex-start;background:#fff4d6;padding:1rem;border-radius:9px;font-weight:700;line-height:1.5}
 #sirsi-item{font-weight:700;overflow-wrap:anywhere}
+
+.danger-outline{background:#fff;color:#922d2b;border:2px solid #ac4542}
+.danger-outline:hover{background:#fff3f1}
+.danger-fill{background:#9b2525;color:#fff}
+#stats-clear-dialog{width:min(94vw,530px)}
+#stats-clear-form{display:grid;gap:.8rem}
+#stats-clear-form h2{margin:0}
+#stats-clear-form label{font-weight:650}
+#stats-clear-form input{font:inherit;padding:.7rem;border:1px solid #9baab9;border-radius:8px;width:100%}
+#stats-clear-error{color:#ae2323;font-weight:650;min-height:1em}
