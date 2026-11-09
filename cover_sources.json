@@ -106,5 +106,17 @@
     "url": "https://m.media-amazon.com/images/I/91YRY6YhiBL._AC_SX466_.jpg",
     "source": "Wake Tech Games on Reserve LibGuide",
     "verified": true
+  },
+  {
+    "item_id": "item-20",
+    "page_url": "https://www.eurographicspuzzles.com/en/products/details/6000-5350",
+    "source": "Eurographics official Mediterranean Windows product page",
+    "verified": true
+  },
+  {
+    "item_id": "item-22",
+    "page_url": "https://us.laurenceking.com/products/the-world-of-hercule-poirot",
+    "source": "Laurence King official World of Hercule Poirot product page",
+    "verified": true
   }
 ]
