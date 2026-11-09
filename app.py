@@ -1,6 +1,7 @@
 """Game On! Eastern Wake Reserve Tracker: staff-managed status, no patron data."""
-import os, json, sqlite3, hmac, hashlib, time
+import os, json, hmac, hashlib, time
 from datetime import datetime, timezone, timedelta
+from status_store import list_events, write_event
 from pathlib import Path
 from functools import wraps
 from flask import Flask, jsonify, render_template, request, abort
@@ -19,29 +20,28 @@ if len(SECRET) < 32 or not PASSWORD_HASH:
 app = Flask(__name__)
 app.json.sort_keys = False
 token_signer = URLSafeTimedSerializer(SECRET, salt="game-on-staff")
-DB = Path(os.getenv("DATABASE_PATH", str(ROOT / "data" / "reserve.db")))
-if not DB.is_absolute():
-    DB = ROOT / DB
-DB.parent.mkdir(parents=True, exist_ok=True)
 ITEMS = json.loads((ROOT / "items.json").read_text(encoding="utf-8"))
 IDS = {item["id"] for item in ITEMS}
-
-def connect():
-    conn = sqlite3.connect(DB, timeout=15)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
-    return conn
 
 def now_utc():
     return datetime.now(timezone.utc)
 
-def init_db():
-    with connect() as db:
-        db.execute("CREATE TABLE IF NOT EXISTS status (item_id TEXT PRIMARY KEY, checked_out_at TEXT, due_at TEXT, checked_in_at TEXT, updated_at TEXT NOT NULL)")
-        db.execute("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, item_id TEXT NOT NULL, action TEXT NOT NULL, at TEXT NOT NULL)")
-        for item in ITEMS:
-            db.execute("INSERT OR IGNORE INTO status(item_id,updated_at) VALUES (?,?)", (item["id"], now_utc().isoformat()))
-init_db()
+def current_state():
+    events = list_events()
+    status = {item["id"]: {"checked_out_at": None, "due_at": None, "checked_in_at": None} for item in ITEMS}
+    for event in events:
+        state=status.get(event["item_id"])
+        if state is None:
+            continue
+        moment=event["at"]
+        if event["action"] == "checked_out":
+            state["checked_out_at"]=moment
+            state["due_at"]=(datetime.fromisoformat(moment)+timedelta(hours=3)).isoformat()
+        elif event["action"]=="checked_in":
+            state["checked_out_at"]=None
+            state["due_at"]=None
+            state["checked_in_at"]=moment
+    return status,events
 
 def valid_password(password):
     try:
@@ -84,10 +84,10 @@ def home():
 
 @app.get("/api/board")
 def board():
-    with connect() as db:
-        status = {r["item_id"]: dict(r) for r in db.execute("SELECT * FROM status")}
-        events = [dict(r) for r in db.execute("SELECT item_id,action,at FROM events ORDER BY id DESC LIMIT 30")]
-    return jsonify(items=[{**i, **status.get(i["id"], {})} for i in ITEMS], events=events, server_now=now_utc().isoformat())
+    status,events=current_state()
+    public_events=events[-30:] if staff() else []
+    return jsonify(items=[{**i, **status[i["id"]]} for i in ITEMS],
+                   events=list(reversed(public_events)),server_now=now_utc().isoformat())
 
 ATTEMPTS = {}
 @app.post("/api/login")
@@ -110,24 +110,15 @@ def login():
 def toggle(item_id):
     if item_id not in IDS:
         abort(404)
-    now = now_utc()
-    stamp = now.isoformat()
-    with connect() as db:
-        db.execute("BEGIN IMMEDIATE")
-        state = db.execute("SELECT checked_out_at FROM status WHERE item_id=?", (item_id,)).fetchone()
-        if state["checked_out_at"] is None:
-            due = (now + timedelta(hours=3)).isoformat()
-            db.execute("UPDATE status SET checked_out_at=?,due_at=?,updated_at=? WHERE item_id=?", (stamp, due, stamp, item_id))
-            action = "checked_out"
-        else:
-            db.execute("UPDATE status SET checked_out_at=NULL,due_at=NULL,checked_in_at=?,updated_at=? WHERE item_id=?", (stamp, stamp, item_id))
-            action = "checked_in"
-        db.execute("INSERT INTO events(item_id, action, at) VALUES (?,?,?)", (item_id, action, stamp))
-    return jsonify(action=action, at=stamp)
+    state,_=current_state()
+    action="checked_in" if state[item_id]["checked_out_at"] else "checked_out"
+    now=now_utc()
+    write_event(item_id,action,now)
+    return jsonify(action=action,at=now.isoformat())
 
 @app.get("/health")
 def health():
-    return jsonify(ok=True)
+    return jsonify(ok=True,storage=("blob" if os.getenv("BLOB_READ_WRITE_TOKEN") else "local"))
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=int(os.getenv("PORT", "5000")), debug=False)
