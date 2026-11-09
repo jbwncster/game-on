@@ -1,0 +1,42 @@
+name: Import definitive PDF cover art
+on:
+  push:
+    paths:
+      - assets/pdf_covers.zip
+      - .github/workflows/import-pdf-covers.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install-covers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+      - name: Verify and install PDF covers
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f assets/pdf_covers.zip
+          mkdir -p /tmp/pdf-covers static/covers
+          unzip -q -o assets/pdf_covers.zip -d /tmp/pdf-covers
+          count=$(find /tmp/pdf-covers -maxdepth 1 -type f -name 'cover_*.webp' | wc -l)
+          test "$count" -eq 27
+          test ! -f /tmp/pdf-covers/cover_24.webp
+          for n in $(seq -w 1 28); do
+            if [ "$n" = "24" ]; then continue; fi
+            test -s "/tmp/pdf-covers/cover_${n}.webp"
+            cp "/tmp/pdf-covers/cover_${n}.webp" "static/covers/cover_${n}.webp"
+          done
+      - name: Commit definitive cover images
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add static/covers/cover_*.webp
+          if ! git diff --cached --quiet; then
+            git commit -m "Replace reserve item covers with 27 images extracted from definitive PDF"
+            git push
+          fi
