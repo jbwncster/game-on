@@ -116,6 +116,61 @@ def toggle(item_id):
     write_event(item_id,action,now)
     return jsonify(action=action,at=now.isoformat())
 
+
+@app.get("/staff/stats")
+def staff_stats_page():
+    # The HTML shell is public; the statistics API requires a valid staff token.
+    return render_template("staff_stats.html")
+
+@app.get("/api/staff/stats")
+@requires_staff
+def staff_stats():
+    state, events = current_state()
+    now = now_utc()
+    thirty = now - timedelta(days=30)
+    seven = now - timedelta(days=7)
+    item_lookup = {item["id"]:item for item in ITEMS}
+    totals = {item["id"]:0 for item in ITEMS}
+    recent = []
+    checkouts_7d = checkouts_30d = returns_30d = 0
+    for event in events:
+        item = item_lookup.get(event["item_id"])
+        if not item:
+            continue
+        at = datetime.fromisoformat(event["at"])
+        if event["action"] == "checked_out":
+            totals[event["item_id"]] += 1
+            if at >= seven:
+                checkouts_7d += 1
+            if at >= thirty:
+                checkouts_30d += 1
+        elif event["action"] == "checked_in" and at >= thirty:
+            returns_30d += 1
+        recent.append({
+            "title":item["title"],
+            "barcode":item["barcode"],
+            "action":event["action"],
+            "at":event["at"]
+        })
+    current_out = [
+        {"title":item["title"],"barcode":item["barcode"],
+         "checked_out_at":state[item["id"]]["checked_out_at"],
+         "due_at":state[item["id"]]["due_at"],
+         "overdue":datetime.fromisoformat(state[item["id"]]["due_at"]) < now}
+        for item in ITEMS if state[item["id"]]["checked_out_at"]
+    ]
+    ranking = sorted(
+        [{"title":item["title"],"barcode":item["barcode"],"checkouts":totals[item["id"]]}
+         for item in ITEMS],key=lambda item:(-item["checkouts"],item["title"].lower()))
+    return jsonify(
+        generated_at=now.isoformat(), total_checkouts=sum(totals.values()),
+        checkouts_7d=checkouts_7d,checkouts_30d=checkouts_30d,
+        returns_30d=returns_30d,currently_out=len(current_out),
+        currently_overdue=sum(1 for item in current_out if item["overdue"]),
+        current_out=current_out, by_item=ranking, recent=list(reversed(recent[-100:])),
+        note="Game On! activity only; not a SirsiDynix circulation report."
+    )
+
 @app.get("/health")
 def health():
     return jsonify(ok=True,storage=("blob" if os.getenv("BLOB_READ_WRITE_TOKEN") else "local"))
