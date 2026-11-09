@@ -37,7 +37,7 @@ $("stats-login-form").addEventListener("submit",async e=>{
   }catch(error){$("stats-error").textContent=error.message;}
 });
 $("stats-refresh").addEventListener("click",()=>load().catch(e=>alert(e.message)));
-$("stats-logout").addEventListener("click",()=>{token="";sessionStorage.removeItem("game-on-token");report=null;$("stats-login").hidden=false;$("stats-dashboard").hidden=true;});
+$("stats-logout").addEventListener("click",()=>{token="";sessionStorage.removeItem("game-on-token");report=null;closeClearPanel();$("stats-login").hidden=false;$("stats-dashboard").hidden=true;});
 function csvCell(value){return '"'+String(value??"").replaceAll('"','""').replace(/^[=+@-]/,"'")+'"';}
 $("stats-export").addEventListener("click",()=>{
   if(!report)return;
@@ -47,14 +47,26 @@ $("stats-export").addEventListener("click",()=>{
   const a=document.createElement("a");a.href=objectUrl;a.download="game-on-checkout-stats.csv";a.click();URL.revokeObjectURL(objectUrl);
 });
 
-const clearDialog=$("stats-clear-dialog");
-$("stats-clear-open").addEventListener("click",()=>{
+const clearPanel=$("stats-clear-panel");
+const clearOpen=$("stats-clear-open");
+function closeClearPanel(){
+  clearPanel.hidden=true;
+  clearOpen.setAttribute("aria-expanded","false");
   $("stats-clear-password").value="";
   $("stats-clear-phrase").value="";
   $("stats-clear-error").textContent="";
-  clearDialog.showModal();
+}
+clearOpen.addEventListener("click",()=>{
+  if(!clearPanel.hidden){closeClearPanel();return;}
+  clearPanel.hidden=false;
+  clearOpen.setAttribute("aria-expanded","true");
+  $("stats-clear-password").value="";
+  $("stats-clear-phrase").value="";
+  $("stats-clear-error").textContent="";
+  $("stats-clear-password").focus();
+  clearPanel.scrollIntoView({behavior:"smooth",block:"nearest"});
 });
-$("stats-clear-cancel").addEventListener("click",()=>clearDialog.close());
+$("stats-clear-cancel").addEventListener("click",closeClearPanel);
 $("stats-clear-form").addEventListener("submit",async event=>{
   event.preventDefault();
   if($("stats-clear-phrase").value!=="CLEAR STATS"){
@@ -75,13 +87,10 @@ $("stats-clear-form").addEventListener("submit",async event=>{
     });
     const result=await response.json();
     if(!response.ok)throw Error(result.error||"Unable to reset statistics");
-    clearDialog.close();
-    $("stats-clear-password").value="";
-    $("stats-clear-phrase").value="";
+    closeClearPanel();
     await load();
   }catch(error){
     $("stats-clear-error").textContent=error.message;
   }finally{submit.disabled=false;}
 });
-
 if(token)load().catch(e=>{$("stats-error").textContent=e.message;});
