@@ -9,7 +9,7 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;
 function timeLeft(iso) {
   if (!iso) return "";
   const minutes = Math.ceil((new Date(iso).getTime()-Date.now())/60000);
-  if(minutes <= 0) return "Overdue by " + Math.ceil(-minutes/60) + "h " + (-minutes%60) + "m";
+  if(minutes <= 0) {const late=-minutes;return "Overdue by " + Math.floor(late/60) + "h " + (late%60) + "m";}
   return Math.floor(minutes/60) + "h " + (minutes%60) + "m remaining";
 }
 function imageTag(i) {
@@ -23,7 +23,7 @@ function card(item) {
   const action=out?"Mark checked in":"Check out for 3 hours";
   const label=service?"Out of service":out?"Checked out":"Available";
   el.innerHTML='<div class="cover">'+imageTag(item)+'</div><div class="content"><span class="availability-badge '+(out||service?"unavailable":"available")+'">'+label+'</span><div class="category">'+esc(item.category)+'</div><h3>'+esc(item.title)+'</h3><p>'+esc(item.details)+'</p><p class="description">'+esc(item.description||"")+'</p>'+(item.warning?'<p class="warning">⚠ '+esc(item.warning)+'</p>':"")+
-    '<p class="meta">RESERVE (Ask front desk)<br>'+esc(item.call_number)+' · '+esc(item.barcode)+'</p>'+
+    '<p class="meta">3-hour reserve (Ask front desk)<br>'+esc(item.call_number)+' · '+esc(item.barcode)+'</p>'+
     (out?'<div class="checkout"><strong>'+(late?'Overdue':'Checked out')+'</strong><br>Out: '+localTime(item.checked_out_at)+'<br>Due: '+localTime(item.due_at)+'<br><span class="remaining">'+timeLeft(item.due_at)+'</span></div>' :service?'<p class="warning">Temporarily unavailable. Ask library staff.</p>':'<p class="ready">Available at the desk</p>')+
     (staffToken?'<div class="staff-card-actions">'+(!service||out?'<button class="toggle" data-id="'+esc(item.id)+'">'+action+'</button>':'')+'<button type="button" class="maintenance-open" data-id="'+esc(item.id)+'">Condition / service</button></div>'+(item.condition_note?'<p class="private-note"><strong>Staff note:</strong> '+esc(item.condition_note)+'</p>':''):'')+'</div>';
   return el;
@@ -31,7 +31,6 @@ function card(item) {
 function render() {
   const query=$("search").value.trim().toLowerCase();
   const matches=board.filter(x=>[x.title,x.category,x.details,x.barcode,x.call_number].join(" ").toLowerCase().includes(query));
-  $("available-section").hidden=availabilityFilter==="out";
   $("out-section").hidden=availabilityFilter==="available" || availabilityFilter==="service";
   $("service-section").hidden=availabilityFilter==="available" || availabilityFilter==="out";
   $("available-section").hidden=availabilityFilter==="out" || availabilityFilter==="service";
@@ -41,7 +40,7 @@ function render() {
   if(!avail.children.length) avail.innerHTML='<p class="empty">No available items match your search.</p>';
   if(!service.children.length) service.innerHTML='<p class="empty">No out-of-service items match your search.</p>';
   if(!out.children.length) out.innerHTML='<p class="empty">No checked-out items match your search.</p>';
-  const checked=board.filter(i=>i.checked_out_at && !i.out_of_service);
+  const checked=board.filter(i=>i.checked_out_at);
   const held=board.filter(i=>i.out_of_service);
   $("available-count").textContent=(board.length-board.filter(i=>i.checked_out_at||i.out_of_service).length)+" ready to borrow";
   $("out-count").textContent=checked.length+" checked out";
@@ -50,7 +49,7 @@ function render() {
   const byId=Object.fromEntries(board.map(i=>[i.id,i.title]));
   $("events").replaceChildren(...events.map(e=>{
     const li=document.createElement("li");
-    li.textContent=(byId[e.item_id]||e.item_id)+" — "+(e.action==="checked_out"?"Checked out":"Checked in")+" · "+localTime(e.at);
+    li.textContent=(byId[e.item_id]||e.item_id)+" — "+({checked_out:"Checked out",checked_in:"Checked in",maintenance:"Condition updated"}[e.action]||e.action)+" · "+localTime(e.at);
     return li;
   }));
   $("login-button").hidden=!!staffToken; $("logout-button").hidden=!staffToken;
