@@ -204,8 +204,29 @@ def staff_stats():
          "overdue":datetime.fromisoformat(state[item["id"]]["due_at"]) < now}
         for item in ITEMS if state[item["id"]]["checked_out_at"]
     ]
+    def status_for(item_state):
+        if item_state["out_of_service"]:
+            return "Out of service"
+        if item_state["checked_out_at"]:
+            return "Overdue" if item_state["due_at"] and datetime.fromisoformat(item_state["due_at"]) < now else "Checked out"
+        return "Available"
+
+    item_statuses = [
+        {"title":item["title"], "barcode":item["barcode"],
+         "status":status_for(state[item["id"]]),
+         "checked_out_at":state[item["id"]]["checked_out_at"],
+         "due_at":state[item["id"]]["due_at"],
+         "updated_at":state[item["id"]]["updated_at"],
+         "condition_note":state[item["id"]]["condition_note"]}
+        for item in ITEMS
+    ]
+    status_counts = {
+        label: sum(1 for item in item_statuses if item["status"] == label)
+        for label in ("Available", "Checked out", "Overdue", "Out of service")
+    }
     ranking = sorted(
-        [{"title":item["title"],"barcode":item["barcode"],"checkouts":totals[item["id"]]}
+        [{"title":item["title"],"barcode":item["barcode"],"checkouts":totals[item["id"]],
+          "status":status_for(state[item["id"]])}
          for item in ITEMS],key=lambda item:(-item["checkouts"],item["title"].lower()))
     return jsonify(
         generated_at=now.isoformat(), stats_reset_at=last_reset,
@@ -214,6 +235,7 @@ def staff_stats():
         returns_30d=returns_30d,currently_out=len(current_out),
         currently_overdue=sum(1 for item in current_out if item["overdue"]),
         current_out=current_out, by_item=ranking, recent=list(reversed(recent[-100:])),
+        item_statuses=item_statuses, status_counts=status_counts,
         note="Game On! activity only; not a SirsiDynix circulation report."
     )
 
