@@ -45,6 +45,7 @@ function render() {
     return li;
   }));
   $("login-button").hidden=!!staffToken; $("logout-button").hidden=!staffToken;
+  $("stats-link").hidden=!staffToken;
 }
 async function refresh() {
   try {
@@ -55,16 +56,45 @@ async function refresh() {
     render();
   } catch(e) {$("updated").textContent="Unable to connect — refresh the page"; }
 }
-document.addEventListener("click", async event=>{
+let pendingSirsiItem = null;
+document.addEventListener("click", event => {
   const btn=event.target.closest("button.toggle");
   if(!btn) return;
-  btn.disabled=true;
+  const item=board.find(i=>i.id===btn.dataset.id);
+  if(!item) return;
+  pendingSirsiItem=item;
+  const checkingIn=!!item.checked_out_at;
+  $("sirsi-title").textContent=checkingIn?"Return item in SirsiDynix first":"Check out item in SirsiDynix first";
+  $("sirsi-message").textContent=checkingIn?
+    "Complete the check-in in SirsiDynix before marking this item available.":
+    "Complete the 3-hour reserve checkout in SirsiDynix before marking this item checked out.";
+  $("sirsi-item").textContent=item.title+" | Barcode: "+item.barcode;
+  $("sirsi-confirm").checked=false;
+  $("sirsi-dialog").showModal();
+});
+$("sirsi-cancel").addEventListener("click",()=>{
+  pendingSirsiItem=null;
+  $("sirsi-dialog").close();
+});
+$("sirsi-form").addEventListener("submit",async event=>{
+  event.preventDefault();
+  if(!pendingSirsiItem||!$("sirsi-confirm").checked) return;
+  const item=pendingSirsiItem;
+  $("sirsi-save").disabled=true;
   try {
-    const response=await fetch("/api/item/"+encodeURIComponent(btn.dataset.id)+"/toggle",{method:"POST",headers:{"Authorization":"Bearer "+staffToken}});
-    if(response.status===401){staffToken="";sessionStorage.removeItem("game-on-token");throw Error("Session expired. Sign in again.");}
-    if(!response.ok) throw Error("Could not change item status.");
+    const response=await fetch("/api/item/"+encodeURIComponent(item.id)+"/toggle",{
+      method:"POST",headers:{"Authorization":"Bearer "+staffToken}
+    });
+    if(response.status===401){
+      staffToken="";sessionStorage.removeItem("game-on-token");
+      throw Error("Staff session expired. Sign in again.");
+    }
+    if(!response.ok)throw Error("Could not update the tracker. Verify the item's status.");
+    pendingSirsiItem=null;
+    $("sirsi-dialog").close();
     await refresh();
-  } catch(e){alert(e.message);btn.disabled=false;render();}
+  }catch(error){alert(error.message);render();}
+  finally{$("sirsi-save").disabled=false;}
 });
 $("search").addEventListener("input",render);
 document.querySelectorAll("button.filter").forEach(button=>button.addEventListener("click",()=>{availabilityFilter=button.dataset.filter;document.querySelectorAll("button.filter").forEach(b=>{b.classList.toggle("active",b===button);b.setAttribute("aria-pressed",String(b===button));});render();}));
