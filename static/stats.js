@@ -41,10 +41,20 @@ $("stats-logout").addEventListener("click",()=>{token="";sessionStorage.removeIt
 function csvCell(value){return '"'+String(value??"").replaceAll('"','""').replace(/^[=+@-]/,"'")+'"';}
 $("stats-export").addEventListener("click",()=>{
   if(!report)return;
-  const rows=[["Title","Barcode","Recorded checkouts"],...report.by_item.map(i=>[i.title,i.barcode,i.checkouts])];
+  const rows=[["Report section","Item","Barcode","Value","Timestamp","Status"],
+    ["Summary","Total recorded checkouts","",report.total_checkouts,report.generated_at,""],
+    ["Summary","Checkouts last 7 days","",report.checkouts_7d,report.generated_at,""],
+    ["Summary","Checkouts last 30 days","",report.checkouts_30d,report.generated_at,""],
+    ["Summary","Returns last 30 days","",report.returns_30d,report.generated_at,""],
+    ["Summary","Currently checked out","",report.currently_out,report.generated_at,""],
+    ["Summary","Currently overdue","",report.currently_overdue,report.generated_at,""],
+    ...report.by_item.map(i=>["Item checkouts",i.title,i.barcode,i.checkouts,"",""]),
+    ...report.current_out.map(i=>["Currently checked out",i.title,i.barcode,"",i.checked_out_at,i.overdue?"Overdue":"Checked out"]),
+    ...report.recent.map(i=>["Recent event",i.title,i.barcode,i.action,i.at,""])
+  ];
   const csv=rows.map(r=>r.map(csvCell).join(",")).join("\r\n");
   const objectUrl=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
-  const a=document.createElement("a");a.href=objectUrl;a.download="game-on-checkout-stats.csv";a.click();URL.revokeObjectURL(objectUrl);
+  const a=document.createElement("a");a.href=objectUrl;a.download="game-on-staff-report-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(objectUrl);
 });
 
 const clearPanel=$("stats-clear-panel");
