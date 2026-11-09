@@ -73,6 +73,9 @@ def requires_staff(fn):
 @app.after_request
 def secure_headers(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
+    if request.path == "/api/board" and request.headers.get("Origin") == "https://researchguides.waketech.edu":
+        response.headers["Access-Control-Allow-Origin"] = "https://researchguides.waketech.edu"
+        response.headers["Vary"] = "Origin"
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers["Cache-Control"] = "no-store" if request.path.startswith("/api/") else "public,max-age=300"
     response.headers["Content-Security-Policy"] = "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'self' https://researchguides.waketech.edu https://*.libguides.com"
