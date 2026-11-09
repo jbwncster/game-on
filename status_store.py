@@ -15,10 +15,10 @@ def parse_path(path):
     try:
         name = path.split("/")[-1].removesuffix(".json")
         timestamp, unique, item_id, action = name.split("-", 3)
-        if action not in ("in","out") or not item_id.startswith("item-"):
+        if action not in ("in","out") or not item_id.startswith("item_"):
             return None
         moment = datetime.strptime(timestamp,"%Y%m%dT%H%M%S%fZ").replace(tzinfo=timezone.utc)
-        return {"item_id":item_id,"action":"checked_out" if action=="out" else "checked_in",
+        return {"item_id":item_id.replace("_","-"),"action":"checked_out" if action=="out" else "checked_in",
                 "at":moment.isoformat()}
     except (ValueError, IndexError):
         return None
