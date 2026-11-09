@@ -3,7 +3,7 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Staff Statistics | Game On!</title>
 <link rel="stylesheet" href="/static/style.css">
-<script src="/static/stats.js?v=20261109-resetfix" defer></script></head>
+<script src="/static/stats.js?v=20261109-statuses" defer></script></head>
 <body>
 <header><div class="wrap head"><div><div class="eyebrow">EASTERN WAKE CAMPUS LIBRARY · STAFF ONLY</div><h1>Game On! Statistics</h1><p>Manual checkout activity for games, puzzles and LEGO</p></div><a class="staff-link" href="/">← Back to availability board</a></div></header>
 <main class="wrap" id="stats-main">
@@ -15,8 +15,9 @@
 <div id="stats-dashboard" hidden>
 <div class="stats-toolbar"><p id="stats-updated" class="muted"></p><button id="stats-refresh" type="button">Refresh</button><button id="stats-export" type="button">Download CSV</button><button id="stats-logout" type="button">Sign out</button><button id="stats-clear-open" class="danger-outline" type="button" aria-expanded="false" aria-controls="stats-clear-panel">Clear Statistics…</button></div>
 <p id="stats-reset-note" class="muted"></p><div id="stats-kpis" class="stats-kpis" aria-live="polite"></div>
+<section aria-labelledby="stats-status-heading"><h2 id="stats-status-heading">Current inventory statuses</h2><p class="muted">Current item availability and condition, independent of reporting resets. Notes are visible to staff only.</p><div class="stats-table-wrap"><table><thead><tr><th scope="col">Item</th><th scope="col">Barcode</th><th scope="col">Status</th><th scope="col">Due</th><th scope="col">Last change</th><th scope="col">Staff condition note</th></tr></thead><tbody id="stats-statuses"></tbody></table></div></section>
 <section><h2>Items currently checked out</h2><div class="stats-table-wrap"><table><thead><tr><th>Item</th><th>Barcode</th><th>Checked out</th><th>Due</th><th>Status</th></tr></thead><tbody id="stats-out"></tbody></table></div></section>
-<section><h2>Most frequently checked out</h2><div class="stats-table-wrap"><table><thead><tr><th>Item</th><th>Barcode</th><th>Recorded checkouts</th></tr></thead><tbody id="stats-ranking"></tbody></table></div></section>
+<section><h2>Most frequently checked out</h2><div class="stats-table-wrap"><table><thead><tr><th>Item</th><th>Barcode</th><th>Recorded checkouts</th><th>Current status</th></tr></thead><tbody id="stats-ranking"></tbody></table></div></section>
 <section><h2>Recent activity (up to 100 events)</h2><div class="stats-table-wrap"><table><thead><tr><th>Item</th><th>Action</th><th>Date and time</th></tr></thead><tbody id="stats-events"></tbody></table></div></section>
 </div>
 <section id="stats-clear-panel" class="stats-clear-panel" aria-labelledby="stats-clear-title" hidden>
