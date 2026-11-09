@@ -34,7 +34,7 @@ function render(){
   for(const item of shown){
     const card=document.createElement("article");card.className="go-card";
     const img=document.createElement("img");
-    const match=String(item.image||"").match(/cover_(\\d{2})\\.webp$/);
+    const match=String(item.image||"").match(/cover_(\d{2})\.webp$/);
     if(match && match[1]!=="24"){
       img.src=githubCovers+"cover_"+match[1]+".webp";
       img.addEventListener("error",()=>{
