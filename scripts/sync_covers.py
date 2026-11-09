@@ -23,7 +23,19 @@ for entry in SOURCES:
         print(f"KEEP {dest.name}")
         continue
     try:
-        url = entry["url"]
+        url = entry.get("url")
+        if not url and entry.get("page_url"):
+            from bs4 import BeautifulSoup
+            from urllib.parse import urljoin
+            page = session.get(entry["page_url"], timeout=25)
+            page.raise_for_status()
+            soup = BeautifulSoup(page.text, "html.parser")
+            og = soup.find("meta", attrs={"property":"og:image"}) or soup.find("meta", attrs={"name":"twitter:image"})
+            if not og or not og.get("content"):
+                raise ValueError("No product cover metadata")
+            url = urljoin(entry["page_url"], og["content"])
+        if not url:
+            raise ValueError("No image URL")
         if not url.startswith("https://"):
             raise ValueError("HTTPS required")
         res = session.get(url, timeout=25, allow_redirects=True)
