@@ -2,3 +2,4 @@ Flask>=3.0,<4
 itsdangerous>=2.2,<3
 python-dotenv>=1.0,<2
 gunicorn>=22,<24
+vercel>=0.5.0,<2
