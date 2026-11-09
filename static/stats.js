@@ -10,13 +10,16 @@ function render(data){
   $("stats-dashboard").hidden=false;$("stats-login").hidden=true;
   $("stats-updated").textContent="Updated "+fmt(data.generated_at);
   $("stats-reset-note").textContent=data.stats_reset_at?"Reporting totals reset on "+fmt(data.stats_reset_at)+". Current availability is unchanged.":"Reporting totals include all recorded activity.";
-  const kpis=[["All-time checkouts",data.total_checkouts],["Checkouts, 7 days",data.checkouts_7d],["Checkouts, 30 days",data.checkouts_30d],["Returns, 30 days",data.returns_30d],["Currently checked out",data.currently_out],["Currently overdue",data.currently_overdue]];
+  const kpis=[["All-time checkouts",data.total_checkouts],["Checkouts, 7 days",data.checkouts_7d],["Checkouts, 30 days",data.checkouts_30d],["Returns, 30 days",data.returns_30d],["Currently checked out",data.currently_out],["Currently overdue",data.currently_overdue],["Available",data.status_counts["Available"]],["Out of service",data.status_counts["Out of service"]]];
   $("stats-kpis").replaceChildren(...kpis.map(([label,value])=>{const item=document.createElement("div");item.className="stats-kpi";const n=document.createElement("strong");n.textContent=value;const p=document.createElement("span");p.textContent=label;item.append(n,p);return item;}));
+  const statuses=$("stats-statuses");statuses.replaceChildren();
+  data.item_statuses.forEach(i=>row(statuses,[i.title,i.barcode,i.status,fmt(i.due_at),fmt(i.updated_at),i.condition_note||"—"]));
+  empty(statuses,6,"No inventory statuses were returned.");
   const out=$("stats-out");out.replaceChildren();
   data.current_out.forEach(i=>row(out,[i.title,i.barcode,fmt(i.checked_out_at),fmt(i.due_at),i.overdue?"Overdue":"Checked out"]));
   empty(out,5,"No items currently checked out.");
   const ranking=$("stats-ranking");ranking.replaceChildren();
-  data.by_item.forEach(i=>row(ranking,[i.title,i.barcode,i.checkouts]));empty(ranking,3,"No checkouts recorded.");
+  data.by_item.forEach(i=>row(ranking,[i.title,i.barcode,i.checkouts,i.status]));empty(ranking,4,"No checkouts recorded.");
   const events=$("stats-events");events.replaceChildren();
   data.recent.forEach(i=>row(events,[i.title,i.action==="checked_out"?"Checked out":"Checked in",fmt(i.at)]));
   empty(events,3,"No activity recorded yet.");
@@ -48,7 +51,9 @@ $("stats-export").addEventListener("click",()=>{
     ["Summary","Returns last 30 days","",report.returns_30d,report.generated_at,""],
     ["Summary","Currently checked out","",report.currently_out,report.generated_at,""],
     ["Summary","Currently overdue","",report.currently_overdue,report.generated_at,""],
-    ...report.by_item.map(i=>["Item checkouts",i.title,i.barcode,i.checkouts,"",""]),
+    ...Object.entries(report.status_counts).map(([status,count])=>["Status total",status,"",count,report.generated_at,status]),
+    ...report.by_item.map(i=>["Item checkouts",i.title,i.barcode,i.checkouts,"",i.status]),
+    ...report.item_statuses.map(i=>["Current inventory",i.title,i.barcode,i.condition_note,i.updated_at,i.status]),
     ...report.current_out.map(i=>["Currently checked out",i.title,i.barcode,"",i.checked_out_at,i.overdue?"Overdue":"Checked out"]),
     ...report.recent.map(i=>["Recent event",i.title,i.barcode,i.action,i.at,""])
   ];
