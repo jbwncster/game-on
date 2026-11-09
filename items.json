@@ -7,7 +7,11 @@
     "barcode": "33063002097086",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_01.webp"
+    "image": "/static/covers/cover_01.webp",
+    "description": "A literary-themed puzzle inspired by Poe’s famous poem. Assemble the illustrated scene; pieces are not guaranteed.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 1
   },
   {
     "id": "item-02",
@@ -17,7 +21,11 @@
     "barcode": "33063002101441",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_02.webp"
+    "image": "/static/covers/cover_02.webp",
+    "description": "Assemble John D. Dawson’s panoramic Great Plains Prairie artwork, originally featured on a USPS Nature of America stamp pane.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 1
   },
   {
     "id": "item-03",
@@ -27,17 +35,25 @@
     "barcode": "33063002101375",
     "call_number": "LEGO CLASSIC, White Baseplate",
     "warning": null,
-    "image": "/static/covers/cover_03.webp"
+    "image": "/static/covers/cover_03.webp",
+    "description": "Set 11026. Build and display creations on a white, approximately 10-inch-square LEGO foundation. Bricks not included.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 1
   },
   {
     "id": "item-04",
     "title": "LEGO Wild Animals: Pink Flamingo",
     "category": "LEGO Creator 3-in-1",
-    "details": "288 pieces",
+    "details": "288 pieces · Ages 8+",
     "barcode": "33063002101367",
     "call_number": "LEGO CREATOR, 3 in 1 Flamingo Rosa",
     "warning": null,
-    "image": "/static/covers/cover_04.webp"
+    "image": "/static/covers/cover_04.webp",
+    "description": "Set 31170. Rebuild the same bricks into a flamingo, cockatoo, or axolotl. Only one model can be built at a time.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 1
   },
   {
     "id": "item-05",
@@ -47,17 +63,25 @@
     "barcode": "33063002097094",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_05.webp"
+    "image": "/static/covers/cover_05.webp",
+    "description": "Piece together a mystery LEGO minifigure image. Puzzle pieces are not guaranteed.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 2
   },
   {
     "id": "item-06",
     "title": "Marvel Strike Teams",
-    "category": "Board game",
-    "details": "2–5 players · 368 components",
+    "category": "Board game · 2–5 players",
+    "details": "60–120 min · 2.50/5 · 368 components",
     "barcode": "33063002092640",
     "call_number": "BOARD GAME",
     "warning": null,
-    "image": "/static/covers/cover_06.webp"
+    "image": "/static/covers/cover_06.webp",
+    "description": "One player commands the villains while other players use Marvel heroes to complete missions and overcome obstacles.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 2
   },
   {
     "id": "item-07",
@@ -67,17 +91,25 @@
     "barcode": "33063002096732",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_07.webp"
+    "image": "/static/covers/cover_07.webp",
+    "description": "Recreate a miniature version of Johannes Vermeer’s celebrated painting.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 2
   },
   {
     "id": "item-08",
     "title": "Monopoly: Marvel Deadpool",
-    "category": "Board game",
-    "details": "2–6 players",
+    "category": "Board game · 2–6 players",
+    "details": "60–240 min · 1.00/5",
     "barcode": "33063002092657",
     "call_number": "BOARD GAME",
     "warning": null,
-    "image": "/static/covers/cover_08.webp"
+    "image": "/static/covers/cover_08.webp",
+    "description": "Trade mercenary contracts and vehicles, build headquarters, charge opponents, and try to be the last player solvent.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 2
   },
   {
     "id": "item-09",
@@ -87,17 +119,25 @@
     "barcode": "33063002101458",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_09.webp"
+    "image": "/static/covers/cover_09.webp",
+    "description": "Assemble a lively, dog-themed Wolfpack game-day illustration.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 3
   },
   {
     "id": "item-10",
     "title": "One Hundred Dogs and a Cat",
     "category": "Jigsaw puzzle",
-    "details": "750-piece set · missing pieces",
+    "details": "750-piece set · at least 1 missing",
     "barcode": "33063002101433",
     "call_number": "PUZZLES",
-    "warning": "At least one piece missing",
-    "image": "/static/covers/cover_10.webp"
+    "warning": "At least one puzzle piece is missing",
+    "image": "/static/covers/cover_10.webp",
+    "description": "A colorful crowd of dogs surrounds one clever cat. Library record notes missing puzzle piece(s).",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 3
   },
   {
     "id": "item-11",
@@ -107,17 +147,25 @@
     "barcode": "33063002099736",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_11.webp"
+    "image": "/static/covers/cover_11.webp",
+    "description": "Piece together Laura Audi’s intricate owl-themed artwork.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 3
   },
   {
     "id": "item-12",
     "title": "Pokémon Ghost Type",
     "category": "Glow-in-the-dark puzzle",
-    "details": "750 pieces",
+    "details": "750 pieces · Ages 14+",
     "barcode": "33063002097029",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_12.webp"
+    "image": "/static/covers/cover_12.webp",
+    "description": "Assemble Ghost-type Pokémon, then enjoy the image’s glow-in-the-dark details. Finished size: 24 × 18.25 in.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 3
   },
   {
     "id": "item-13",
@@ -127,7 +175,11 @@
     "barcode": "33063002097102",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_13.webp"
+    "image": "/static/covers/cover_13.webp",
+    "description": "Complete a Jane Austen-inspired literary puzzle. Pieces are not guaranteed.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 4
   },
   {
     "id": "item-14",
@@ -137,17 +189,25 @@
     "barcode": "33063002101102",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_14.webp"
+    "image": "/static/covers/cover_14.webp",
+    "description": "Assemble a Victorian-style gallery of ghouls, monsters, and gold-foil details.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 4
   },
   {
     "id": "item-15",
     "title": "Walls of York",
-    "category": "Board game",
-    "details": "2–4 players · 183 components",
+    "category": "Board game · 2–4 players",
+    "details": "30 min · 1.79/5 · 183 components",
     "barcode": "33063002092699",
     "call_number": "BOARD GAME",
     "warning": null,
-    "image": "/static/covers/cover_15.webp"
+    "image": "/static/covers/cover_15.webp",
+    "description": "Build walls around York’s buildings, satisfy the king’s demands, defend against raids, and earn the most coins.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 4
   },
   {
     "id": "item-16",
@@ -157,87 +217,123 @@
     "barcode": "33063002101334",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_16.webp"
+    "image": "/static/covers/cover_16.webp",
+    "description": "Complete a cozy library scene of cats, bookshelves, and wildflowers.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 4
   },
   {
     "id": "item-17",
     "title": "XenoShyft: Dreadmire",
-    "category": "Board game",
-    "details": "1–4 players",
+    "category": "Board game · 1–4 players",
+    "details": "30–60 min · 2.69/5",
     "barcode": "33063002092632",
     "call_number": "BOARD GAME",
     "warning": null,
-    "image": "/static/covers/cover_17.webp"
+    "image": "/static/covers/cover_17.webp",
+    "description": "Cooperate to build troop and equipment decks, then defend a remote outpost against waves of aliens.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 5
   },
   {
     "id": "item-18",
     "title": "Zelda Hyrule Crest",
     "category": "Metal brain teaser",
-    "details": "2 metal pieces",
+    "details": "2 metal pieces · Level 4 (Hard)",
     "barcode": "33063002096864",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_18.webp"
+    "image": "/static/covers/cover_18.webp",
+    "description": "Manipulate the metal pieces to solve the Hyrule Crest challenge, then try to restore the starting shape.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 5
   },
   {
     "id": "item-19",
     "title": "National Parks",
     "category": "Jigsaw puzzle",
-    "details": "1,000 pieces",
+    "details": "1,000 pieces · 50 × 70 cm",
     "barcode": "33063002101128",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_19.webp"
+    "image": "/static/covers/cover_19.webp",
+    "description": "Assemble national park scenes. Includes a reference diagram.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 5
   },
   {
     "id": "item-20",
     "title": "Mediterranean Windows",
     "category": "Jigsaw puzzle",
-    "details": "1,000 pieces",
+    "details": "1,000 pieces · 48.9 × 67.6 cm",
     "barcode": "33063002101417",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_20.webp"
+    "image": "/static/covers/cover_20.webp",
+    "description": "Piece together colorful Mediterranean windows from the Colors of the World series.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 5
   },
   {
     "id": "item-21",
     "title": "Christmas Party: Oversized",
     "category": "Jigsaw puzzle",
-    "details": "1,000 pieces",
+    "details": "1,000 pieces · 27 × 39 in",
     "barcode": "33063002099751",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_21.webp"
+    "image": "/static/covers/cover_21.webp",
+    "description": "An oversized holiday puzzle. Pieces are expected but not guaranteed.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 6
   },
   {
     "id": "item-22",
     "title": "The World of Hercule Poirot",
     "category": "Jigsaw puzzle",
-    "details": "1,000 pieces",
+    "details": "1,000 pieces · 27 × 19 in",
     "barcode": "33063002099538",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_22.webp"
+    "image": "/static/covers/cover_22.webp",
+    "description": "Explore Agatha Christie’s detective world in a literary-themed puzzle.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 6
   },
   {
     "id": "item-23",
     "title": "Andrea Pippins Puzzle",
     "category": "Jigsaw puzzle",
-    "details": "300 pieces",
+    "details": "300 pieces · 27 × 21.5 in",
     "barcode": "33063002096955",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_23.webp"
+    "image": "/static/covers/cover_23.webp",
+    "description": "A colorful jigsaw puzzle featuring Andrea Pippins artwork, donated by Eastern TLC.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 6
   },
   {
     "id": "item-24",
     "title": "Amazing Coral Reef",
     "category": "Jigsaw puzzle",
-    "details": "500 pieces",
+    "details": "500 pieces · 18 × 24 in",
     "barcode": "33063002101110",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_24.webp"
+    "image": "/static/covers/cover_24.webp",
+    "description": "An underwater-themed coral reef puzzle featuring colorful sea life.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 6
   },
   {
     "id": "item-25",
@@ -246,8 +342,12 @@
     "details": "1,000-piece set · 1 missing",
     "barcode": "33063002101094",
     "call_number": "PUZZLES",
-    "warning": "One piece missing",
-    "image": "/static/covers/cover_25.webp"
+    "warning": "One puzzle piece is missing",
+    "image": "/static/covers/cover_25.webp",
+    "description": "A Star Wars-themed puzzle. Library records note that one piece is missing; includes a reference diagram.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 7
   },
   {
     "id": "item-26",
@@ -256,27 +356,39 @@
     "details": "1,000-piece set · 1 missing",
     "barcode": "33063002101425",
     "call_number": "PUZZLES",
-    "warning": "One piece missing",
-    "image": "/static/covers/cover_26.webp"
+    "warning": "One puzzle piece is missing",
+    "image": "/static/covers/cover_26.webp",
+    "description": "A farm-market-themed puzzle. Library records note that one piece is missing; includes a reference diagram.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 7
   },
   {
     "id": "item-27",
     "title": "Road Trip America",
     "category": "Jigsaw puzzle",
-    "details": "1,000 pieces",
+    "details": "1,000 pieces · over 31 in wide",
     "barcode": "33063002099744",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_27.webp"
+    "image": "/static/covers/cover_27.webp",
+    "description": "A United States-shaped puzzle featuring American landmarks and travel-themed illustrations.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 7
   },
   {
     "id": "item-28",
     "title": "Puppy Pals",
     "category": "Jigsaw puzzle",
-    "details": "500 pieces",
+    "details": "500 pieces · 19⅓ × 14¼ in",
     "barcode": "33063002099652",
     "call_number": "PUZZLES",
     "warning": null,
-    "image": "/static/covers/cover_28.webp"
+    "image": "/static/covers/cover_28.webp",
+    "description": "A collection of cheerful puppy photographs to piece together.",
+    "loan_label": "RESERVE (Ask front desk)",
+    "source": "Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf",
+    "source_page": 7
   }
 ]
