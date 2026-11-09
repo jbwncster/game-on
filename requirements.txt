@@ -3,3 +3,4 @@ itsdangerous>=2.2,<3
 python-dotenv>=1.0,<2
 gunicorn>=22,<24
 vercel-blob==0.5.1
+qrcode>=8,<9
