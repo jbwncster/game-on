@@ -129,6 +129,10 @@ def staff_stats_page():
 @requires_staff
 def staff_stats():
     state, events = current_state()
+    reset_events = [e for e in events if e["action"] == "stats_reset"]
+    last_reset = reset_events[-1]["at"] if reset_events else None
+    if last_reset:
+        events = [e for e in events if e["at"] > last_reset]
     now = now_utc()
     thirty = now - timedelta(days=30)
     seven = now - timedelta(days=7)
@@ -166,13 +170,32 @@ def staff_stats():
         [{"title":item["title"],"barcode":item["barcode"],"checkouts":totals[item["id"]]}
          for item in ITEMS],key=lambda item:(-item["checkouts"],item["title"].lower()))
     return jsonify(
-        generated_at=now.isoformat(), total_checkouts=sum(totals.values()),
+        generated_at=now.isoformat(), stats_reset_at=last_reset,
+        total_checkouts=sum(totals.values()),
         checkouts_7d=checkouts_7d,checkouts_30d=checkouts_30d,
         returns_30d=returns_30d,currently_out=len(current_out),
         currently_overdue=sum(1 for item in current_out if item["overdue"]),
         current_out=current_out, by_item=ranking, recent=list(reversed(recent[-100:])),
         note="Game On! activity only; not a SirsiDynix circulation report."
     )
+
+@app.post("/api/staff/stats/reset")
+@requires_staff
+def reset_staff_stats():
+    body = request.get_json(silent=True) or {}
+    if not isinstance(body, dict):
+        return jsonify(error="Invalid request"), 400
+    if body.get("confirmation") != "CLEAR STATS":
+        return jsonify(error="Type CLEAR STATS to confirm."), 400
+    password = body.get("password", "")
+    if not isinstance(password, str) or not valid_password(password):
+        return jsonify(error="Incorrect staff password; statistics unchanged."), 403
+    when = now_utc()
+    # Append-only reset marker: preserve prior audit history and current item statuses.
+    write_event("__stats__", "stats_reset", when)
+    return jsonify(ok=True, reset_at=when.isoformat(),
+                   message="Reporting totals reset; item availability unchanged.")
+
 
 @app.get("/health")
 def health():
