@@ -18,7 +18,7 @@ function card(item) {
   const el=document.createElement("article");
   el.className="card"+(late?" late":"");
   const action=out?"Mark checked in":"Check out for 3 hours";
-  el.innerHTML='<div class="cover">'+imageTag(item)+'</div><div class="content"><span class="availability-badge '+(out?"unavailable":"available")+'">'+(out?"Checked out":"Available")+'</span><div class="category">''+esc(item.category)+'</div><h3>'+esc(item.title)+'</h3><p>'+esc(item.details)+'</p><p class="description">'+esc(item.description||"")+'</p>'+(item.warning?'<p class="warning">⚠ '+esc(item.warning)+'</p>':"")+
+  el.innerHTML='<div class="cover">'+imageTag(item)+'</div><div class="content"><span class="availability-badge '+(out?"unavailable":"available")+'">'+(out?"Checked out":"Available")+'</span><div class="category">'+esc(item.category)+'</div><h3>'+esc(item.title)+'</h3><p>'+esc(item.details)+'</p><p class="description">'+esc(item.description||"")+'</p>'+(item.warning?'<p class="warning">⚠ '+esc(item.warning)+'</p>':"")+
     '<p class="meta">RESERVE (Ask front desk)<br>'+esc(item.call_number)+' · '+esc(item.barcode)+'</p>'+
     (out?'<div class="checkout"><strong>'+(late?'Overdue':'Checked out')+'</strong><br>Out: '+localTime(item.checked_out_at)+'<br>Due: '+localTime(item.due_at)+'<br><span class="remaining">'+timeLeft(item.due_at)+'</span></div>':'<p class="ready">Available at the desk</p>')+
     (staffToken?'<button class="toggle" data-id="'+esc(item.id)+'">'+action+'</button>':'')+'</div>';
