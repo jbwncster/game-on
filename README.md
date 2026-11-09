@@ -30,3 +30,11 @@ When deployed, embed the secure URL in a LibGuides HTML box:
 ```
 
 **Security:** Use a stronger, unique staff password before production deployment, and ask Wake Tech IT to review hosting, authentication, access controls, backups, and permission to use game cover artwork. Avoid patron names or borrowing histories in this tracker.
+
+## Cover image assets (still to upload)
+
+The source package includes 28 optimized cover images under `static/covers/cover_01.webp` through `cover_28.webp`. Those **binary images have not yet been uploaded to this repository**. Until then, the web page displays a dice placeholder instead of the cover. Extract the [GitHub-ready ZIP](https://chatgpt.com/) supplied in the project conversation, then use GitHub's **Add file → Upload files** to upload `static/covers/` (preserving the paths). Do not upload `.env`.
+
+## Testing status
+
+Python and JavaScript source syntax has been checked locally. End-to-end Flask tests and physical barcode scanner tests have **not** been completed. The repo is not yet deployed and is not ready to embed in LibGuides until hosting, persistent storage, and staff sign-in are verified.
