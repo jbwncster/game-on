@@ -15,10 +15,10 @@ def parse_path(path):
     try:
         name = path.split("/")[-1].removesuffix(".json")
         timestamp, unique, item_id, action = name.split("-", 3)
-        if action not in ("in","out") or not item_id.startswith("item_"):
+        if not ((item_id.startswith("item_") and action in ("in","out")) or (item_id == "stats_reset" and action == "reset")):
             return None
         moment = datetime.strptime(timestamp,"%Y%m%dT%H%M%S%fZ").replace(tzinfo=timezone.utc)
-        return {"item_id":item_id.replace("_","-"),"action":"checked_out" if action=="out" else "checked_in",
+        return {"item_id":item_id.replace("_","-"),"action":"stats_reset" if action=="reset" else ("checked_out" if action=="out" else "checked_in"),
                 "at":moment.isoformat()}
     except (ValueError, IndexError):
         return None
@@ -43,15 +43,15 @@ def list_events():
     return sorted(records,key=lambda e:e["at"])
 
 def write_event(item_id,action,when):
-    if action not in ("checked_in","checked_out"):
+    if action not in ("checked_in","checked_out","stats_reset"):
         raise ValueError("Invalid action")
     if not BLOB_ENABLED:
         with _local_connection() as db:
             db.execute("INSERT INTO actions(item_id,action,at) VALUES(?,?,?)",(item_id,action,when.isoformat()))
         return
     from vercel.blob import sync as blob
-    action_short="out" if action=="checked_out" else "in"
+    action_short={"checked_out":"out","checked_in":"in","stats_reset":"reset"}[action]
     stamp=when.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    safe_id=item_id.replace("-","_")
+    safe_id="stats_reset" if action=="stats_reset" else item_id.replace("-","_")
     pathname=f"events/{stamp}-{uuid.uuid4().hex}-{safe_id}-{action_short}.json"
     blob.put_blob(pathname,b"{}",access="private",content_type="application/json")
