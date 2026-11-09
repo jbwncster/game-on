@@ -3,7 +3,7 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Staff Statistics | Game On!</title>
 <link rel="stylesheet" href="/static/style.css">
-<script src="/static/stats.js" defer></script></head>
+<script src="/static/stats.js?v=20261109-resetfix" defer></script></head>
 <body>
 <header><div class="wrap head"><div><div class="eyebrow">EASTERN WAKE CAMPUS LIBRARY · STAFF ONLY</div><h1>Game On! Statistics</h1><p>Manual checkout activity for games, puzzles and LEGO</p></div><a class="staff-link" href="/">← Back to availability board</a></div></header>
 <main class="wrap" id="stats-main">
@@ -13,23 +13,23 @@
 <form id="stats-login-form"><label for="stats-password">Staff password</label><input id="stats-password" type="password" autocomplete="current-password" required><button type="submit">View statistics</button></form><p role="alert" id="stats-error"></p>
 </section>
 <div id="stats-dashboard" hidden>
-<div class="stats-toolbar"><p id="stats-updated" class="muted"></p><button id="stats-refresh" type="button">Refresh</button><button id="stats-export" type="button">Download CSV</button><button id="stats-logout" type="button">Sign out</button><button id="stats-clear-open" class="danger-outline" type="button">Clear Statistics…</button></div>
+<div class="stats-toolbar"><p id="stats-updated" class="muted"></p><button id="stats-refresh" type="button">Refresh</button><button id="stats-export" type="button">Download CSV</button><button id="stats-logout" type="button">Sign out</button><button id="stats-clear-open" class="danger-outline" type="button" aria-expanded="false" aria-controls="stats-clear-panel">Clear Statistics…</button></div>
 <p id="stats-reset-note" class="muted"></p><div id="stats-kpis" class="stats-kpis" aria-live="polite"></div>
 <section><h2>Items currently checked out</h2><div class="stats-table-wrap"><table><thead><tr><th>Item</th><th>Barcode</th><th>Checked out</th><th>Due</th><th>Status</th></tr></thead><tbody id="stats-out"></tbody></table></div></section>
 <section><h2>Most frequently checked out</h2><div class="stats-table-wrap"><table><thead><tr><th>Item</th><th>Barcode</th><th>Recorded checkouts</th></tr></thead><tbody id="stats-ranking"></tbody></table></div></section>
 <section><h2>Recent activity (up to 100 events)</h2><div class="stats-table-wrap"><table><thead><tr><th>Item</th><th>Action</th><th>Date and time</th></tr></thead><tbody id="stats-events"></tbody></table></div></section>
 </div>
-<dialog id="stats-clear-dialog" aria-labelledby="stats-clear-title">
+<section id="stats-clear-panel" class="stats-clear-panel" aria-labelledby="stats-clear-title" hidden>
 <form id="stats-clear-form">
 <h2 id="stats-clear-title">Clear reporting statistics?</h2>
 <p>This resets displayed checkout totals, rankings, and activity history. It <strong>will not</strong> check in any items or change the student availability board. Underlying private audit events are retained.</p>
-<label for="stats-clear-password">Re-enter the staff password</label>
+<label for="stats-clear-password">Re-enter the same staff password</label>
 <input id="stats-clear-password" type="password" autocomplete="off" required>
 <label for="stats-clear-phrase">Type <strong>CLEAR STATS</strong> to confirm</label>
 <input id="stats-clear-phrase" type="text" autocomplete="off" spellcheck="false" required>
 <p id="stats-clear-error" role="alert"></p>
 <div class="buttons"><button type="button" id="stats-clear-cancel">Cancel</button><button type="submit" id="stats-clear-submit" class="danger-fill">Clear Statistics</button></div>
-</form></dialog>
+</form></section>
 </main>
 <footer>Game On! is a supplemental manual availability board, not a replacement for SirsiDynix.</footer>
 </body></html>
