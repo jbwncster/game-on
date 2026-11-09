@@ -1,22 +1,19 @@
-<!-- Game On! native LibGuides widget: no iframe. Under 2,000 characters. -->
-<div id="game-on-embed">
-  <p><strong>🎲 Game On! — Eastern Wake Library</strong></p>
-  <p>Browse our 28 games, puzzles and LEGO items. 3-hour reserve; ask the front desk.</p>
-  <p><a href="https://game-on-flame.vercel.app/" target="_blank" rel="noopener noreferrer">Open the live game availability tracker</a></p>
-</div>
+<!-- Place in the guide-specific Custom JS/CSS area. No iframe. -->
 <script>
 (function(){
-function addWidget(){
-var target=document.getElementById("game-on-embed");
-if(!target||target.dataset.ready)return;
-target.dataset.ready="1";
-var s=document.createElement("script");
-s.src="https://game-on-flame.vercel.app/static/embed.js";
-s.async=true;
-s.onerror=function(){target.insertAdjacentHTML("beforeend","<p>Availability cannot load here. Please open the full tracker using the link above.</p>");};
-document.head.appendChild(s);
+function initGameOn(){
+var parent=document.querySelector("#s-lg-guide-main");
+if(!parent||document.getElementById("game-on-embed"))return;
+var box=document.createElement("section");box.id="game-on-embed";
+box.innerHTML='<p><strong>🎲 Game On! — Eastern Wake Library</strong></p><p>Browse 28 games, puzzles &amp; LEGO items. 3-hour reserve; ask the front desk.</p><p><a href="https://game-on-flame.vercel.app/" target="_blank" rel="noopener noreferrer">Open the live availability tracker</a></p>';
+parent.appendChild(box);
+var script=document.createElement("script");
+script.src="https://game-on-flame.vercel.app/static/embed.js";
+script.async=true;
+script.onerror=function(){var p=document.createElement("p");p.textContent="Live availability cannot load inside this guide. Open the tracker using the link above.";box.appendChild(p);};
+document.head.appendChild(script);
 }
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",addWidget);
-else addWidget();
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initGameOn);
+else initGameOn();
 })();
 </script>
