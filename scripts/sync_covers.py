@@ -31,9 +31,24 @@ for entry in SOURCES:
             page.raise_for_status()
             soup = BeautifulSoup(page.text, "html.parser")
             og = soup.find("meta", attrs={"property":"og:image"}) or soup.find("meta", attrs={"name":"twitter:image"})
-            if not og or not og.get("content"):
-                raise ValueError("No product cover metadata")
-            url = urljoin(entry["page_url"], og["content"])
+            if og and og.get("content"):
+                url = urljoin(entry["page_url"], og["content"])
+            else:
+                # Product pages without OpenGraph artwork: select an image
+                # explicitly mentioning the puzzle title in its alt text.
+                title_hint = entry.get("title_hint", "")
+                candidates = []
+                for image in soup.select("img"):
+                    alt = image.get("alt", "").lower()
+                    if title_hint and title_hint.lower() in alt:
+                        candidate = image.get("data-src") or image.get("src")
+                        if candidate:
+                            candidates.append(urljoin(entry["page_url"], candidate))
+                if not candidates:
+                    raise ValueError("No product cover metadata")
+                url = candidates[0]
+        if url and url.startswith("http://"):
+            url = "https://" + url[7:]
         if not url:
             raise ValueError("No image URL")
         if not url.startswith("https://"):
