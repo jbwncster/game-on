@@ -1,5 +1,11 @@
 # Game On! — Eastern Wake Reserve Tracker
 
+## Definitive inventory and artwork
+
+**Source of truth:** the seven-page PDF `Eastern_Wake_Games_On_Reserve_Adobe_Express_Editable(1).pdf` supplied by Eastern Wake staff. Its 28 cards and the names, descriptions, piece counts, player counts, loan labels, warnings, and SirsiDynix barcode values printed on them supersede any conflicting website or marketplace listing. The aligned `items.json` includes `source_page` (four cards per page) for easy auditing. Amazon, eBay, BoardGameGeek, and the public LibGuide are secondary sources for artwork only, and should not change the catalog data. The supplied PDF itself is not committed to this repository.
+
+
+
 A staff-managed availability board for the Eastern Wake Campus Library's **28 games, puzzles, and LEGO items**. This repository contains the Flask application. It is not yet a live website.
 
 ## Features
@@ -33,7 +39,7 @@ When deployed, embed the secure URL in a LibGuides HTML box:
 
 ## Cover image assets (still to upload)
 
-The source package includes 28 optimized cover images under `static/covers/cover_01.webp` through `cover_28.webp`. Those **binary images have not yet been uploaded to this repository**. Until then, the web page displays a dice placeholder instead of the cover. Extract the [GitHub-ready ZIP](https://chatgpt.com/) supplied in the project conversation, then use GitHub's **Add file → Upload files** to upload `static/covers/` (preserving the paths). Do not upload `.env`.
+The PDF includes card art for 27 items and one placeholder for Amazing Coral Reef. The earlier source package includes 28 optimized cover-image assets (which may not all match the PDF). The source package includes optimized cover images under `static/covers/cover_01.webp` through `cover_28.webp`. Those **binary images have not yet been uploaded to this repository**. Until then, the web page displays a dice placeholder instead of the cover. Extract the [GitHub-ready ZIP](https://chatgpt.com/) supplied in the project conversation, then use GitHub's **Add file → Upload files** to upload `static/covers/` (preserving the paths). Do not upload `.env`.
 
 ## Testing status
 
