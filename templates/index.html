@@ -9,10 +9,12 @@
 <main class="wrap">
 <div class="notice">Checkouts are for <strong>3 hours</strong>. Availability is updated manually by library staff and is not synchronized with SirsiDynix.</div>
 <div class="toolbar"><label for="search">Find a game or puzzle</label><input id="search" type="search" placeholder="Search title, barcode, type…"><span id="updated" aria-live="polite"></span></div>
+<div class="filters" role="group" aria-label="Filter by availability"><button type="button" class="filter active" data-filter="all" aria-pressed="true">All items</button><button type="button" class="filter" data-filter="available" aria-pressed="false">Available now</button><button type="button" class="filter" data-filter="out" aria-pressed="false">Checked out</button></div>
 <div class="summary" aria-live="polite"><span id="available-count">— available</span><span id="out-count">— checked out</span><span id="overdue-count">— overdue</span></div>
-<section aria-labelledby="available-heading"><h2 id="available-heading">✅ Ready to Borrow</h2><div class="cards" id="available"></div></section>
-<section aria-labelledby="out-heading"><h2 id="out-heading">🕒 Checked Out</h2><div class="cards" id="out"></div></section>
-<section aria-labelledby="activity-heading" class="activity"><h2 id="activity-heading">Recent activity</h2><p class="muted">Item status changes only. No patron details are recorded.</p><ol id="events"></ol></section>
+<p class="muted" id="student-note">Availability reflects the latest manual staff update. Please confirm at the front desk before visiting.</p>
+<section id="available-section" aria-labelledby="available-heading"><h2 id="available-heading">✅ Ready to Borrow</h2><div class="cards" id="available"></div></section>
+<section id="out-section" aria-labelledby="out-heading"><h2 id="out-heading">🕒 Checked Out</h2><div class="cards" id="out"></div></section>
+<section aria-labelledby="activity-heading" id="activity-section" class="activity"><h2 id="activity-heading">Recent activity</h2><p class="muted">Item status changes only. No patron details are recorded.</p><ol id="events"></ol></section>
 </main>
 <dialog id="login-dialog"><form id="login-form" method="dialog"><h2>Staff sign in</h2><label for="password">Staff password</label><input type="password" id="password" autocomplete="current-password" required><p id="login-error" role="alert"></p><div class="buttons"><button id="cancel" type="button">Cancel</button><button type="submit">Sign in</button></div></form></dialog>
 <footer>Eastern Wake Campus Library · This board is informational; confirm item status at the front desk.</footer>
