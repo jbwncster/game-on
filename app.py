@@ -4,7 +4,7 @@ from datetime import datetime, timezone, timedelta
 from status_store import list_events, write_event
 from pathlib import Path
 from functools import wraps
-from flask import Flask, jsonify, render_template, request, abort
+from flask import Flask, jsonify, render_template, request, abort, Response
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 try:
     from dotenv import load_dotenv
@@ -91,6 +91,18 @@ def board():
     public_events=events[-30:] if staff() else []
     return jsonify(items=[{**i, **status[i["id"]]} for i in ITEMS],
                    events=list(reversed(public_events)),server_now=now_utc().isoformat())
+
+@app.get("/api/public-board.js")
+def public_board_script():
+    # Script-based public feed avoids third-party fetch/CORS restrictions inside LibGuides.
+    # Do not publish staff activity events or authentication data here.
+    state, _ = current_state()
+    payload = {"items": [{**item, **state[item["id"]]} for item in ITEMS],
+               "server_now": now_utc().isoformat()}
+    safe_json = json.dumps(payload, ensure_ascii=True, separators=(",", ":")).replace("<", "\\u003c")
+    return Response("window.GameOnReceive && window.GameOnReceive(" + safe_json + ");",
+                    content_type="application/javascript; charset=utf-8")
+
 
 ATTEMPTS = {}
 @app.post("/api/login")
