@@ -28,15 +28,19 @@ def now_utc():
 
 def current_state():
     events = list_events()
-    status = {item["id"]: {"checked_out_at": None, "due_at": None, "checked_in_at": None} for item in ITEMS}
+    status = {item["id"]: {"checked_out_at": None, "due_at": None, "checked_in_at": None, "out_of_service": False, "condition_note": "", "updated_at": None} for item in ITEMS}
     for event in events:
         state=status.get(event["item_id"])
         if state is None:
             continue
         moment=event["at"]
+        state["updated_at"]=moment
         if event["action"] == "checked_out":
             state["checked_out_at"]=moment
             state["due_at"]=(datetime.fromisoformat(moment)+timedelta(hours=3)).isoformat()
+        elif event["action"]=="maintenance":
+            state["out_of_service"]=event.get("payload",{}).get("out_of_service",False)
+            state["condition_note"]=event.get("payload",{}).get("note","")
         elif event["action"]=="checked_in":
             state["checked_out_at"]=None
             state["due_at"]=None
@@ -89,16 +93,18 @@ def home():
 def board():
     status,events=current_state()
     public_events=events[-30:] if staff() else []
-    return jsonify(items=[{**i, **status[i["id"]]} for i in ITEMS],
-                   events=list(reversed(public_events)),server_now=now_utc().isoformat())
+    return jsonify(items=[{**i, **{k:v for k,v in status[i["id"]].items() if k!="condition_note" or staff()}} for i in ITEMS],
+                   events=list(reversed(public_events)),server_now=now_utc().isoformat(),
+                   last_change_at=max((e["at"] for e in events),default=None))
 
 @app.get("/api/public-board.js")
 def public_board_script():
     # Script-based public feed avoids third-party fetch/CORS restrictions inside LibGuides.
     # Do not publish staff activity events or authentication data here.
     state, _ = current_state()
-    payload = {"items": [{**item, **state[item["id"]]} for item in ITEMS],
-               "server_now": now_utc().isoformat()}
+    payload = {"items": [{**item, **{k:v for k,v in state[item["id"]].items() if k!="condition_note"}} for item in ITEMS],
+               "server_now": now_utc().isoformat(),
+               "last_change_at":max((e["at"] for e in list_events()),default=None)}
     safe_json = json.dumps(payload, ensure_ascii=True, separators=(",", ":")).replace("<", "\\u003c")
     return Response("window.GameOnReceive && window.GameOnReceive(" + safe_json + ");",
                     content_type="application/javascript; charset=utf-8")
@@ -126,11 +132,29 @@ def toggle(item_id):
     if item_id not in IDS:
         abort(404)
     state,_=current_state()
+    if state[item_id]["out_of_service"] and not state[item_id]["checked_out_at"]:
+        return jsonify(error="Item is out of service; restore it before checkout."), 409
     action="checked_in" if state[item_id]["checked_out_at"] else "checked_out"
     now=now_utc()
     write_event(item_id,action,now)
     return jsonify(action=action,at=now.isoformat())
 
+
+@app.post("/api/staff/item/<item_id>/maintenance")
+@requires_staff
+def update_maintenance(item_id):
+    if item_id not in IDS:
+        abort(404)
+    body = request.get_json(silent=True)
+    if not isinstance(body,dict) or not isinstance(body.get("out_of_service"),bool):
+        return jsonify(error="Invalid maintenance status"),400
+    note=body.get("note","")
+    if not isinstance(note,str) or len(note)>250:
+        return jsonify(error="Condition note must be 250 characters or fewer"),400
+    # Never add patron names, identifiers or borrowing histories to staff notes.
+    when=now_utc()
+    write_event(item_id,"maintenance",when,{"out_of_service":body["out_of_service"],"note":note.strip()})
+    return jsonify(ok=True,updated_at=when.isoformat())
 
 @app.get("/staff/stats")
 def staff_stats_page():
@@ -165,6 +189,8 @@ def staff_stats():
                 checkouts_30d += 1
         elif event["action"] == "checked_in" and at >= thirty:
             returns_30d += 1
+        if event["action"] not in ("checked_out","checked_in"):
+            continue
         recent.append({
             "title":item["title"],
             "barcode":item["barcode"],
